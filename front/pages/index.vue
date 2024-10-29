@@ -1,167 +1,142 @@
-
 <script setup>
+
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import InputMask from "primevue/inputmask";
 import Button from 'primevue/button';
-
-const incorrect_data = ref(false)
-const form = ref({ phone: '', password: '' })
-const error = ref('Incorrect login or password')
 
 const router = useRouter()
 
-async function to_register() {
-    
+async function to_catalog() {
+    router.push('/catalog')
 }
 
-/* async function SignIn() {
-    const data = await apiUsersLogin(form)
-    if (data == 200) {
-        const loginStore = UseLoginStore()
-        await loginStore.fetch()
-        router.push('/lobby')
-    } else {
-        incorrect_data.value = true
+const commertial_cards = ref([
+    {
+        right: {
+            label: "Мы поможем вам",
+            text: "Предлагаем корпоративным клиентам и частным лицам услуги в области правового и финансового консалтинга: юридические услуги, бухгалтерские услуги, регистрация и ликвидация фирм, регистрация оффшоров, а также услуги в сфере международного налогового планирования",
+            button_label: "В каталог",
+            picture_path: "img/first_index_picture.png",
+            alt_picture: "first_index_picture"
+
+        },
+        left:
+        {
+            label: "Быстро и удобно",
+            text: `<br>
+				Откройте бизнес "под ключ"<br>
+				<ul type="circle">
+					<li> Сбор информации об организации
+					<li> Подписание и подача документов
+					<li> Получение документов
+				</ul>
+				<br>
+				Бухгалтерские услуги<br>
+				<ol type="a">
+					<li> Абонентское бухгалтерское обслуживание
+					<li> Нулевая отчетность
+					<li> Восстановление бухгалтерского учета
+				</ol>`,
+            button_label: "В каталог",
+            picture_path: "img/second_index_picture.png",
+            alt_picture: "second_index_picture"
+        }
+    },
+    {
+        right: {
+            label: "В любой точке Земного шара",
+            text: `<ol type="A">
+					<li>Международное налоговое планирование и консалтинг
+					</li>
+					<li> Оффшоры. Регистрация компаний за рубежом
+						<ol type="a">
+							<li> Сейшелы
+							</li>
+							<li> Британские Виргинские Острова
+							</li>
+						</ol>
+					<li> Контролируемые иностранные компании
+				</ol>`,
+            button_label: "В каталог",
+            picture_path: "img/third_index_picture.png",
+            alt_picture: "third_index_picture"
+
+        },
+        left:
+        {
+            label: "Услуги высшего качества",
+            text: "Юридические консультации, ведение дел в судах, все виды юридических услуг. Обширный профессиональный опыт наших адвокатов обеспечит качественную защиту Ваших интересов. Интересы клиента и его доверие — наш приоритет. Вся информация, которую Вы доверяете своему адвокату, является адвокатской тайной и охраняется законом.",
+            button_label: "В каталог",
+            picture_path: "img/fourth_index_picture.png",
+            alt_picture: "fourth_index_picture"
+        }
     }
-} */
+])
 
 
 </script>
 
 <template>
-    <div class="login_page">
-        <div class="login_form">
-            <div class="description">
-                <p>Auth</p>
+    <div class="page">
+
+        <Header></Header>
+        <div class="content_with_footer">
+            <div class="content">
+                <div class="base_info">
+
+                </div>
+                <div class="cards">
+                    <div class="card" v-for="(commertial_card, index) in commertial_cards" :key="index">
+                        <div class="right_commertial">
+                            <img class="picture" :src="commertial_card.right.picture_path"
+                                :alt="commertial_card.right.alt_picture">
+                            <div class="card_text">
+                                <p class="label">
+                                    {{ commertial_card.right.label }}
+                                </p>
+                                <p class="text">
+                                    {{ commertial_card.right.text }}
+                                </p>
+                                <Button class="button" :label="commertial_card.right.button_label" @click="to_catalog"></Button>
+                            </div>
+                        </div>
+                        <div class="left_commertial">
+                            <img class="picture" :src="commertial_card.left.picture_path"
+                                :alt="commertial_card.left.alt_picture">
+                            <div class="card_text">
+                                <p class="label">
+                                    {{ commertial_card.left.label }}
+                                </p>
+                                <p class="text">
+                                    {{ commertial_card.left.text }}
+                                </p>
+                                <Button class="button" :label="commertial_card.left.button_label" @click="to_catalog"></Button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="form">
-                <form class="form" @submit.prevent="SignIn">
-                    <p>
-                        <InputMask id="basic" v-model="form.phone" mask="+7(999)-999-99-99" placeholder="+7(999)-999-99-99"/>
-                    </p>
-                    <p>
-                        <input class="field_input" id="password" name="password" placeholder="Password" required=""
-                            type="password" v-model="form.password">
-                    </p>
-                    <p>
-                        <Button label="Войти" @click="to_register"></Button>
-                    </p>
-                    <p v-if="incorrect_data" class="auth_error">
-                        {{ error }}
-                    </p>
-                </form>
-            </div>
+            <Footer></Footer>
         </div>
-        <a href="/register" class="register">Sign Up</a>
     </div>
 </template>
 
 <style scoped>
-.login_page {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-content: center;
-    align-items: center;
-    height: 100%;
+.page {
+    min-height: 100vh;
 }
 
-.login_page * {
-    caret-color: transparent;
-    border: none;
-}
-
-.login_page * ::selection {
-    background-color: #550066;
-}
-
-.login_form {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    font-size: 20px;
-    background-color: #111010;
-    gap: 16px;
-}
-
-.description {
-    font-size: 28px;
-    user-select: none;
-}
-
-.field_input {
-    box-sizing: border-box;
-    width: 180px;
-    height: 30px;
-    border-radius: 3px;
-    background-color: #222020;
-    color: #ffffff;
-    padding: 2px 8px 2px 8px;
-}
-
-.field_input:focus {
-    caret-color: #9900aa;
-    outline: 2px solid #550066;
-}
-
-.form {
-    background-color: #111010;
+.content_with_footer {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    justify-content: center;
+    height: 100vh;
 }
 
-.remember_me_container {
-    width: max-content;
-    font-size: 18px;
-}
-
-.remember_me_container input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 14px;
-    height: 14px;
-    border: 2px solid #550066;
-    border-radius: 3px;
-    outline: none;
-    cursor: pointer;
-    position: relative;
-}
-
-.remember_me_container input[type="checkbox"]:checked::before {
-    content: "\2714";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 13px;
-    color: #9900aa;
-}
-
-.auth_error {
-    color: red;
-    font-size: 15px;
-}
-
-
-.register {
-    user-select: none;
-    font-size: 20px;
-    padding: 10px;
-    color: #880099;
-    text-decoration: none;
-    font-weight: 900;
-}
-
-.register:hover {
-    color: #aa00bb;
+.content {
+    flex-grow: 1;
+    background-color: var(--p-surface-950);
+    color: var(--p-surface-50)
 }
 </style>

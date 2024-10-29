@@ -15,12 +15,29 @@ const MyPreset = definePreset(Aura, {
       800: '{orange.800}',
       900: '{orange.900}',
       950: '{orange.950}'
+    },
+    surface: {
+      50: '{neutral.950}',
+      100: '{neutral.100}',
+      200: '{neutral.200}',
+      300: '{neutral.300}',
+      400: '{neutral.400}',
+      500: '{neutral.500}',
+      600: '{neutral.600}',
+      700: '{neutral.700}',
+      800: '{neutral.800}',
+      900: '{neutral.900}',
+      950: '{neutral.50}'
     }
   }
 });
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  devServer: {
+    host: "0.0.0.0",
+    port: 3000
+  },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   modules: [
