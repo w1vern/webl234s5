@@ -1,7 +1,6 @@
 import { definePreset } from "@primevue/themes";
 import Aura from "@primevue/themes/aura"
 
-
 const MyPreset = definePreset(Aura, {
   semantic: {
     primary: {
@@ -26,8 +25,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@primevue/nuxt-module',
-    '@nuxtjs/tailwindcss',
-    '@vueuse/nuxt',
     'vue-yandex-maps/nuxt',
     '@pinia/nuxt'
   ],

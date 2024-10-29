@@ -10,12 +10,15 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.5.5",
     "@primevue/themes": "^4.1.1",
     "nuxt": "^3.13.2",
+    "pinia": "^2.2.4",
     "primeicons": "^7.0.0",
     "primevue": "^4.1.1",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "vue-yandex-maps": "^2.1.4"
   },
   "devDependencies": {
     "@primevue/nuxt-module": "^4.1.1"
