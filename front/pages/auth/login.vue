@@ -1,71 +1,80 @@
-
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
 import InputMask from "primevue/inputmask";
 import Button from 'primevue/button';
+import Password from 'primevue/password'
 
 const incorrect_data = ref(false)
 const form = ref({ phone: '', password: '' })
-const error = ref('Incorrect login or password')
+const error = ref('Incorrect phone or password')
 
 const router = useRouter()
 
-async function to_register() {
-    
-}
+async function login() {
 
-/* async function SignIn() {
-    const data = await apiUsersLogin(form)
-    if (data == 200) {
-        const loginStore = UseLoginStore()
-        await loginStore.fetch()
-        router.push('/lobby')
-    } else {
-        incorrect_data.value = true
-    }
-} */
+}
 
 
 </script>
 
 <template>
     <div class="login_page">
-        <div class="login_form">
-            <div class="description">
-                <p>Auth</p>
+        <Header></Header>
+        <div class="content_with_footer">
+            <div class="content">
+                <div class="login_form">
+                    <div class="description">
+                        <p>Вход</p>
+                    </div>
+                    <form class="form" @submit.prevent="SignIn">
+                        <InputMask class="field_input" id="basic" v-model="form.phone" mask="+7 (999) 999-99-99"
+                            placeholder="+7 (999) 999-99-99" />
+                        <Password class="field_input" id="password" name="password" toggleMask placeholder="Пароль"
+                            promptLabel="Введите пароль" weakLabel="Слабый пароль" mediumLabel="Обычный пароль"
+                            strongLabel="Сильный пароль" type="password" v-model="form.password"></Password>
+                        <Button class="field_input" id="go_button" label="Войти" @click="login"></Button>
+                        <!-- <p v-if="incorrect_data" class="auth_error">
+                            {{ error }}
+                        </p> -->
+                    </form>
+                </div>
+                <NuxtLink to="/auth/register" class="register">
+                    <p>Зарегистрироваться </p>
+                </NuxtLink>
+
             </div>
-            <div class="form">
-                <form class="form" @submit.prevent="SignIn">
-                    <p>
-                        <InputMask id="basic" v-model="form.phone" mask="+7(999)-999-99-99" placeholder="+7(999)-999-99-99"/>
-                    </p>
-                    <p>
-                        <input class="field_input" id="password" name="password" placeholder="Password" required=""
-                            type="password" v-model="form.password">
-                    </p>
-                    <p>
-                        <Button label="Войти" @click="to_register"></Button>
-                    </p>
-                    <p v-if="incorrect_data" class="auth_error">
-                        {{ error }}
-                    </p>
-                </form>
-            </div>
+            <Footer class="footer"></Footer>
         </div>
-        <a href="/register" class="register">Sign Up</a>
     </div>
 </template>
 
 <style scoped>
+.footer {
+    width: 100%;
+}
+
 .login_page {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-content: center;
-    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.content_with_footer {
+    width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    width: max-content;
+    height: max-content;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 .login_page * {
@@ -73,67 +82,58 @@ async function to_register() {
     border: none;
 }
 
-.login_page * ::selection {
-    background-color: #550066;
-}
 
 .login_form {
+    background-color: var(--p-surface-200);
     display: flex;
     justify-content: center;
     align-content: center;
     flex-direction: column;
-    border-radius: 10px;
-    padding: 20px;
     text-align: center;
-    font-size: 20px;
-    background-color: #111010;
-    gap: 16px;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 0.3rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    gap: 2rem;
+    padding: 1rem;
 }
 
 .description {
-    font-size: 28px;
+    font-size: 2rem;
     user-select: none;
 }
 
 .field_input {
+    width: 100%;
     box-sizing: border-box;
-    width: 180px;
-    height: 30px;
-    border-radius: 3px;
-    background-color: #222020;
-    color: #ffffff;
-    padding: 2px 8px 2px 8px;
+    color: var(--p-surface-800);
+    height: 1.8rem;
 }
 
-.field_input:focus {
-    caret-color: #9900aa;
-    outline: 2px solid #550066;
+
+#go_button {
+    width: 50%;
+    color: var(--p-surface-50);
 }
 
 .form {
-    background-color: #111010;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1rem;
     justify-content: center;
 }
 
 .remember_me_container {
     width: max-content;
     font-size: 18px;
-}
-
-.remember_me_container input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 14px;
-    height: 14px;
-    border: 2px solid #550066;
-    border-radius: 3px;
-    outline: none;
-    cursor: pointer;
-    position: relative;
 }
 
 .remember_me_container input[type="checkbox"]:checked::before {
@@ -143,7 +143,6 @@ async function to_register() {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 13px;
-    color: #9900aa;
 }
 
 .auth_error {
@@ -156,12 +155,12 @@ async function to_register() {
     user-select: none;
     font-size: 20px;
     padding: 10px;
-    color: #880099;
+    color: var(--p-surface-950);
     text-decoration: none;
     font-weight: 900;
 }
 
 .register:hover {
-    color: #aa00bb;
+    color: var(--p-surface-500);
 }
 </style>

@@ -17,22 +17,22 @@ async function to_login() {
                 </NuxtLink>
             </div>
             <div class="pages">
-                <div class="about default default_left">
-                    <NuxtLink to="/about">
+                <div class="about ">
+                    <NuxtLink to="/about" class="default_left">
                         <p>
                             О Нас
                         </p>
                     </NuxtLink>
                 </div>
-                <div class="contacts default default_left">
-                    <NuxtLink to="/contacts">
+                <div class="contacts ">
+                    <NuxtLink to="/contacts" class="default_left">
                         <p>
                             Контакты
                         </p>
                     </NuxtLink>
                 </div>
-                <div class="catalog default default_left">
-                    <NuxtLink to="/catalog">
+                <div class="catalog ">
+                    <NuxtLink to="/catalog" class="default_left">
                         <p>
                             Каталог
                         </p>
@@ -55,8 +55,8 @@ async function to_login() {
     justify-content: space-between;
     width: 100%;
     position: fixed;
-    background-color: var(--p-surface-700);
-    color: var(--p-surface-50);
+    background-color: var(--p-surface-300);
+    color: var(--p-surface-950);
     z-index: 9999;
 }
 
@@ -74,10 +74,31 @@ async function to_login() {
 
 .pages {
     display: flex;
-    gap: 1rem
+    gap: 2rem;
+    align-items: center;
 }
 
 .logo {
     height: 2.5rem;
+}
+
+.login_button {
+    font-size: 1.5rem;
+    margin-right: 2.5rem;
+}
+
+.default_left {
+    font-size: 1.5rem;
+    color: var(--p-surface-950);
+    text-decoration: none;
+}
+.default_left:hover {
+    color: var(--p-surface-500);
+    padding-top: rem;
+}
+
+.default_left:active
+{
+    color: var(--p-primary-400);
 }
 </style>

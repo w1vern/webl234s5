@@ -2,7 +2,7 @@ import { definePreset } from "@primevue/themes";
 import Aura from "@primevue/themes/aura"
 
 const surface = {
-  50: '{zinc.50}',
+  50 : '{zinc.50}',
   100: '{zinc.100}',
   200: '{zinc.200}',
   300: '{zinc.300}',

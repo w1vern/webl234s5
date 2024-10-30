@@ -13,7 +13,7 @@
 <style>
 .footer {
   display: flex;
-  background-color: var(--p-surface-950);
+  background-color: var(--p-surface-700);
   color: var(--p-surface-50)
 }
 
