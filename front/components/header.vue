@@ -1,13 +1,19 @@
 <script setup>
 
+const router = useRouter()
+
+async function to_login() {
+    router.push('/auth/login')
+}
+
 </script>
 
 <template>
     <div class="header">
         <div class="left">
-            <div class="logo default">
+            <div class="default">
                 <NuxtLink to="/">
-                    <img src="~/assets/img/logo.svg" alt="logo">
+                    <img src="~/assets/img/logo.svg" alt="logo" class="logo">
                 </NuxtLink>
             </div>
             <div class="pages">
@@ -36,18 +42,7 @@
         </div>
         <div class="right">
             <div class="login default default_right">
-                <NuxtLink to="/auth/login">
-                    <p>
-                        Вход
-                    </p>
-                </NuxtLink>
-            </div>
-            <div class="register default default_right">
-                <NuxtLink to="/auth/register">
-                    <p>
-                        Регистрация
-                    </p>
-                </NuxtLink>
+                <Button class="login_button" label="Войти" @click="to_login"></Button>
             </div>
         </div>
 
@@ -60,8 +55,9 @@
     justify-content: space-between;
     width: 100%;
     position: fixed;
-    background-color: var(--p-surface-950);
-    color: var(--p-surface-50)
+    background-color: var(--p-surface-700);
+    color: var(--p-surface-50);
+    z-index: 9999;
 }
 
 .default {
@@ -79,5 +75,9 @@
 .pages {
     display: flex;
     gap: 1rem
+}
+
+.logo {
+    height: 2.5rem;
 }
 </style>
