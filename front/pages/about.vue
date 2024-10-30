@@ -50,10 +50,10 @@ const cards = ref([{ label: 'Профессионализм и надежнос�
 .cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 5rem;
+    gap: 3rem;
     width: 100%;
-    padding: 3rem;
-    gap: 10rem;
+    padding: 5rem;
+    gap: 5rem;
 }
 
 .card {
