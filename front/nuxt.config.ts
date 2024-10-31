@@ -1,5 +1,8 @@
 import { definePreset } from "@primevue/themes";
 import Aura from "@primevue/themes/aura"
+import 'dotenv/config'
+require("dotenv").config()
+
 
 const surface = {
   50 : '{zinc.50}',
@@ -43,6 +46,9 @@ const MyPreset = definePreset(Aura, {
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    yandexToken: ""
+  },
   devServer: {
     host: "0.0.0.0",
     port: 3000
@@ -65,14 +71,9 @@ export default defineNuxtConfig({
     }
   },
   yandexMaps: {
-    apikey: '9088ad51-a476-489c-9d43-c123560ceae9',
+    apikey: process.env.YANDEX_TOKEN,
   },
   css: [
     'primeicons/primeicons.css'
-  ],
-  runtimeConfig: {
-    public: {
-      baseURL: 'http://localhost:8000',
-    },
-  }
+  ]
 })
