@@ -58,7 +58,7 @@ async function register() {
 
 .login_page {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .content_with_footer {

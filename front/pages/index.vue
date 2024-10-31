@@ -124,11 +124,12 @@ const commercial_cards = ref([
 }
 
 .left_commercial {
-    background-color: var(--p-surface-400)
+    background-color: var(--p-surface-300)
 }
 
 .picture {
     width: 50%;
+    height: max-content;
     padding: 6rem;
     border-radius: 7rem;
 }

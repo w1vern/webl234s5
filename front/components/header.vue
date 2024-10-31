@@ -55,9 +55,10 @@ async function to_login() {
     justify-content: space-between;
     width: 100%;
     position: fixed;
-    background-color: var(--p-surface-300);
+    background-color: var(--p-surface-200);
     color: var(--p-surface-950);
     z-index: 9999;
+    border-bottom: solid var(--p-surface-600) 0.01rem;
 }
 
 .default {

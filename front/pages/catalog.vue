@@ -101,7 +101,7 @@ const filtered = computed(() => {
 .content_with_footer {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .content {
@@ -135,7 +135,7 @@ const filtered = computed(() => {
     display: flex;
     flex-direction: row;
     padding: 2rem;
-    background-color: var(--p-surface-300);
+    background-color: var(--p-surface-100);
     border-radius: 1rem;
     gap:2rem;
 }

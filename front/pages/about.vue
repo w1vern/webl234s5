@@ -38,7 +38,7 @@ const cards = ref([{ label: 'Профессионализм и надежнос�
 .content_with_footer {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .content {
@@ -61,7 +61,7 @@ const cards = ref([{ label: 'Профессионализм и надежнос�
     flex-direction: column;
     width: 25vw;
     gap: 2rem;
-    background-color: var(--p-surface-300);
+    background-color: var(--p-surface-100);
     border-radius: 1rem;
     padding: 2rem;
 }

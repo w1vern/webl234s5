@@ -126,7 +126,7 @@ async function send_form() {
   display: flex;
   flex-direction: column;
 
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .content {
@@ -157,7 +157,7 @@ async function send_form() {
   align-content: center;
   padding: 2rem;
   gap: 1.5rem;
-  background-color: var(--p-surface-300);
+  background-color: var(--p-surface-100);
   border-radius: 0.5rem;
 }
 

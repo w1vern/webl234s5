@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <NuxtLoadingIndicator />
     <NuxtPage />
   </div>
@@ -10,6 +10,11 @@
 * {
   margin: 0;
   padding: 0;
+}
+
+.main {
+  background-color: var(--p-surface-300);
+  height: max-content;
 }
 
 </style>
