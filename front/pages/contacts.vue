@@ -77,19 +77,19 @@ async function send_form() {
             <div class="form_header">
               <div class="name">
                 <IftaLabel>
-                  <InputText id="username" v-model="form_data.name" />
+                  <InputText id="username" v-model="form_data.name" pt:root="input_inside"/>
                   <label for="username"> Ваше имя</label>
                 </IftaLabel>
               </div>
               <div class="email">
                 <IftaLabel>
-                  <InputText id="email" v-model="form_data.email" />
+                  <InputText id="email" v-model="form_data.email" pt:root="input_inside"/>
                   <label for="email"> Электронная почта</label>
                 </IftaLabel>
               </div>
             </div>
             <div class="form_text">
-              <Textarea v-model="form_data.message" autoResize rows="5" cols="55" placeholder="Расскажите о своей проблеме"/>
+              <Textarea v-model="form_data.message" autoResize rows="5" cols="55" placeholder="Расскажите о своей проблеме" pt:root="input_inside"/>
             </div>
             <Button class="form_button" label="Отправить" @click="send_form"></Button>
           </div>
@@ -101,6 +101,12 @@ async function send_form() {
 </template>
 
 <style scoped>
+
+.input_inside {
+ width: 100%;
+ min-width: 0;
+}
+
 .overlay {
   background-color: rgba(255, 255, 255, 0.8);
   position: absolute;
@@ -159,24 +165,28 @@ async function send_form() {
   gap: 1.5rem;
   background-color: var(--p-surface-100);
   border-radius: 0.5rem;
+  width: 40rem;
 }
 
 .form_header {
+  width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 6rem;
+  justify-content: space-between;
+  gap: 1rem;
+
 }
 
 .name {
-  width: 10rem;
+  flex-grow: 1;
 }
 
 .email {
-  width: 10rem;
+  flex-grow: 1;
 }
 
 .form_text {
-  width: 30rem;
+  width: 100%;
 }
 
 .form_button {
