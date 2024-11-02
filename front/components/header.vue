@@ -81,6 +81,11 @@ async function to_login() {
 
 .logo {
     height: 2.5rem;
+    transition: filter 0.3s ease;
+}
+
+.logo:hover {
+    filter: brightness(1.5); /* Увеличение яркости */
 }
 
 .login_button {

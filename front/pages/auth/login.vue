@@ -53,14 +53,9 @@ async function login() {
     width: 100%;
 }
 
-.login_page {
-    width: 100vw;
-    min-height: 100vh;
-}
-
 .content_with_footer {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -69,7 +64,6 @@ async function login() {
 .content {
     display: flex;
     width: max-content;
-    height: max-content;
     flex-grow: 1;
     flex-direction: column;
     justify-content: center;
