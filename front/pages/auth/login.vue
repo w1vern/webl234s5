@@ -3,16 +3,31 @@
 import InputMask from "primevue/inputmask";
 import Button from 'primevue/button';
 import Password from 'primevue/password'
+import { useToast } from 'primevue/usetoast';
 
-const incorrect_data = ref(false)
 const form = ref({ phone: '', password: '' })
-const error = ref('Incorrect phone or password')
-
+const toast = useToast();
+const authStore = useAuthStore()
 const router = useRouter()
 
 async function login() {
-
+  if (!form.value.phone || !form.value.password) {
+    toast.add({ summary: "Ошибка", severity: "error", detail: "Вы не заполнили поля", life: 3000})
+    return
+  }
+  const result = await authStore.login(form.value.phone, form.value.password)
+  if(result.status != 200){
+    toast.add({ summary: "Ошибка", severity: "error", detail: "Пользователь с таким телефоном и паролем не существует", life: 3000})
+  } else {
+    toast.add({ summary: "Удачно", severity: "success", detail: "Вы авторизовались", life: 3000})
+    router.push({path: "/"})
+  }
 }
+
+definePageMeta({
+  title: 'Вход',
+  need_not_auth: true
+})
 
 
 </script>

@@ -16,6 +16,7 @@ class ProductRepository:
         product = Product(label=label, description=description, price=price,
                           path_to_image=path_to_image, worker_count=worker_count, time_to_resolve=time_to_resolve)
         self.session.add(product)
+        await self.session.flush()
         return await self.get_by_id(product.id)
 
     async def get_by_id(self, id: UUID) -> Optional[Product]:

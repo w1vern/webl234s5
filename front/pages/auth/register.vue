@@ -3,16 +3,34 @@
 import InputMask from "primevue/inputmask";
 import Button from 'primevue/button';
 import Password from 'primevue/password'
+import { useToast } from 'primevue/usetoast';
 
-const incorrect_data = ref(false)
-const form = ref({ phone: '', password: '' , password1: ''})
-const error = ref('Incorrect phone or password')
-
+const form = ref({ phone: '', password: '', password1: '' })
+const toast = useToast();
+const authStore = useAuthStore()
 const router = useRouter()
-
 async function register() {
-
+    if (!form.value.phone || !form.value.password || !form.value.password1) {
+        toast.add({ summary: "Ошибка", severity: "error", detail: "Вы не заполнили поля", life: 3000 })
+        return
+    }
+    if (form.value.password != form.value.password1) {
+        toast.add({ summary: "Ошибка", severity: "error", detail: "Указанные пароли не совпадают", life: 3000 })
+        return
+    }
+    const result = await authStore.registration(form.value.phone, form.value.password, form.value.password1)
+    if (result.status != 200) {
+        toast.add({ summary: "Ошибка", severity: "error", detail: result.data, life: 3000 })
+    } else {
+        toast.add({ summary: "Удачно", severity: "success", detail: "Вы зарегистрировались", life: 3000 })
+        router.push("/auth/login")
+    }
 }
+
+definePageMeta({
+    title: 'Регистрация',
+    need_not_auth: true
+})
 
 
 </script>
@@ -32,10 +50,12 @@ async function register() {
                         <Password class="field_input" id="password" name="password" toggleMask placeholder="Пароль"
                             promptLabel="Введите пароль" weakLabel="Слабый пароль" mediumLabel="Обычный пароль"
                             strongLabel="Сильный пароль" type="password" v-model="form.password"></Password>
-                        <Password class="field_input" id="password1" name="password1" toggleMask placeholder="Повторите пароль"
-                            promptLabel="Введите пароль" weakLabel="Слабый пароль" mediumLabel="Обычный пароль"
-                            strongLabel="Сильный пароль" type="password" v-model="form.password1"></Password>
-                        <Button class="field_input" id="go_button" label="Зарегистрироваться" @click="login"></Button>
+                        <Password class="field_input" id="password1" name="password1" toggleMask
+                            placeholder="Повторите пароль" promptLabel="Введите пароль" weakLabel="Слабый пароль"
+                            mediumLabel="Обычный пароль" strongLabel="Сильный пароль" type="password"
+                            v-model="form.password1"></Password>
+                        <Button class="field_input" id="go_button" label="Зарегистрироваться"
+                            @click="register"></Button>
                         <!-- <p v-if="incorrect_data" class="auth_error">
                             {{ error }}
                         </p> -->

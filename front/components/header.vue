@@ -2,8 +2,15 @@
 
 const router = useRouter()
 
+const authStore = useAuthStore()
+
 async function to_login() {
     router.push('/auth/login')
+}
+
+async function logout()
+{
+    await authStore.logout()
 }
 
 </script>
@@ -41,8 +48,11 @@ async function to_login() {
             </div>
         </div>
         <div class="right">
-            <div class="login default default_right">
+            <div class="login default default_right" v-if="!authStore.isAuth">
                 <Button class="login_button" label="Войти" @click="to_login"></Button>
+            </div>
+            <div class="login default default_right" v-else>
+                <Button class="login_button" :label="authStore.phone" @click="logout"></Button>
             </div>
         </div>
 

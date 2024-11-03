@@ -2,8 +2,11 @@
 import { YandexMap, YandexMapDefaultFeaturesLayer, YandexMapDefaultMarker, YandexMapDefaultSchemeLayer } from 'vue-yandex-maps';
 import IftaLabel from 'primevue/iftalabel';
 import Textarea from 'primevue/textarea';
+import { useToast } from 'primevue/usetoast';
 
 const map = shallowRef(null);
+const toast = useToast();
+const feedback_store = useFeedbackStore()
 
 const contacts = ref([
   {
@@ -41,6 +44,16 @@ const markers = computed(() => {
 const form_data = ref({ name: "", email: "", message: "" })
 
 async function send_form() {
+  if(!form_data.value.name || !form_data.value.email || !form_data.value.message) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Заполните все поля', life: 3000 });
+    return
+  }
+
+  await feedback_store.sendFeedback(form_data.value.name, form_data.value.email, form_data.value.message)
+
+  form_data.value = { name: "", email: "", message: "" }
+
+  toast.add({ severity: 'success', summary: 'Success', detail: 'Сообщение успешно отправлено', life: 3000 });
 
 }
 

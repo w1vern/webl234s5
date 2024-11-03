@@ -4,11 +4,13 @@ import InputText from 'primevue/inputtext';
 
 const in_search = ref('')
 
-const cards = ref([])
+const catalog_store = useCalatogStore()
+
+await callOnce(catalog_store.fetch)
 
 const filtered = computed(() => {
     let search = in_search.value.toLowerCase()
-    return cards.value.filter(card =>
+    return catalog_store.catalog.filter(card =>
         card.label.toLowerCase().includes(search) ||
         card.description.toLowerCase().includes(search) ||
         card.price.toLowerCase().includes(search)
@@ -44,7 +46,7 @@ const filtered = computed(() => {
                                     Цена: {{ card.price }}
                                 </p>
                             </div>
-                            <img :src="card.picture" alt="picture" class="picture">
+                            <img :src="card.path_to_image" alt="picture" class="picture">
                         </div>
                     </div>
                 </div>
