@@ -1,7 +1,9 @@
 <script setup>
 import Toast from 'primevue/toast';
 const authStore = useAuthStore()
-await callOnce(authStore.fetch)
+onBeforeMount(async () => {
+  await authStore.fetch_session()
+})
 </script>
 
 <template>
