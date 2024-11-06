@@ -4,8 +4,9 @@ export const useAuthStore = defineStore("authStore", {
     phone: "",
   }),
   actions: {
-    async fetch() {
+    async fetch_session() {
       const { data } = await useMyFetch("/api/auth/session");
+      console.log(data)
       if (data.value) {
         this.isAuth = data.value.is_auth;
         this.phone = data.value.phone;
@@ -22,7 +23,7 @@ export const useAuthStore = defineStore("authStore", {
           password: password,
         },
       });
-      await this.fetch();
+      await this.fetch_session();
       if (status.value == "error")
         return {
           status: error.value.statusCode,
@@ -45,7 +46,7 @@ export const useAuthStore = defineStore("authStore", {
           },
         }
       );
-      await this.fetch();
+      await this.fetch_session();
       if (status.value == "error")
         return {
           status: error.value.statusCode,
@@ -60,7 +61,7 @@ export const useAuthStore = defineStore("authStore", {
       const { data, status, error } = await useMyFetch("/api/auth/logout", {
         method: "post",
       });
-      await this.fetch();
+      await this.fetch_session();
     },
   },
 });

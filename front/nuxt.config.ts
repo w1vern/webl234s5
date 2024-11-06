@@ -46,6 +46,7 @@ const MyPreset = definePreset(Aura, {
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: false,
   runtimeConfig: {
     yandexToken: ""
   },
@@ -54,7 +55,13 @@ export default defineNuxtConfig({
     port: 3000
   },
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true
+    }
+  },
   modules: [
     '@primevue/nuxt-module',
     'vue-yandex-maps/nuxt',
