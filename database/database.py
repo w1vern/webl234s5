@@ -20,7 +20,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 class DatabaseSessionManager:
     def __init__(self, host: str, engine_kwargs: dict[str, Any] = {}):
         self._engine = create_async_engine(host, **engine_kwargs)
-        self._sessionmaker = async_sessionmaker(
+        self._session_maker = async_sessionmaker(
             autocommit=False, bind=self._engine, expire_on_commit=False)
 
     async def close(self):
@@ -29,7 +29,7 @@ class DatabaseSessionManager:
         await self._engine.dispose()
 
         self._engine = None
-        self._sessionmaker = None
+        self._session_maker = None
 
     @contextlib.asynccontextmanager
     async def connect(self) -> AsyncIterator[AsyncConnection]:
@@ -45,10 +45,10 @@ class DatabaseSessionManager:
 
     @contextlib.asynccontextmanager
     async def session(self) -> AsyncIterator[AsyncSession]:
-        if self._sessionmaker is None:
+        if self._session_maker is None:
             raise Exception("DatabaseSessionManager is not initialized")
 
-        session = self._sessionmaker()
+        session = self._session_maker()
         try:
             yield session
         except Exception:
@@ -57,14 +57,14 @@ class DatabaseSessionManager:
         finally:
             await session.close()
 
-sessionmanager = DatabaseSessionManager(DATABASE_URL, {"echo": False})
+session_manager = DatabaseSessionManager(DATABASE_URL, {"echo": False})
 
 
 async def get_db_session():
-    async with sessionmanager.session() as session:
+    async with session_manager.session() as session:
         yield session
 
 
 async def create_db_and_tables():
-    async with sessionmanager.connect() as conn:
+    async with session_manager.connect() as conn:
         await conn.run_sync(Base.metadata.create_all)

@@ -1,14 +1,14 @@
 
-import json
-from math import prod
 from fastapi import Cookie, Depends, HTTPException, Response
 from fastapi_controllers import Controller, get, post
 import redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from back.authorize_user import authorize_user
 from back.config import Config
 from back.schemes.basket import Basket
 from database.database import get_db_session
+from database.models.user import User
 from database.redis import RedisDB, get_redis_client
 from database.repositories.product_repository import ProductRepository
 from database.repositories.user_repository import UserRepository
@@ -28,21 +28,11 @@ class CatalogController(Controller):
 		pr = ProductRepository(self.session)
 		products = await pr.get_all()
 		free_workers = int(redis.get(f"{RedisDB.free_workers}").decode('utf-8'))
-		return list([{"id": product.id, "label": product.label, "description": product.description, "price": product.price, "path_to_image": product.path_to_image, "can_be_ordered": free_workers // product.worker_count } for product in products])
+		return list([{"id": product.id, "label": product.label, "description": product.description, "price": product.price, "sale": product.sale, "path_to_image": product.path_to_image, "time_to_resolve": product.time_to_resolve, "can_be_ordered": free_workers // product.worker_count } for product in products])
 
-	@post("/new_basket_state")
-	async def new_basket_state(self, basket: Basket, session_id : str = Cookie(default=None), redis: redis.Redis = Depends(get_redis_client)):
-		if session_id is None:
-			raise HTTPException(status_code=401, detail="Unauthorized")
-		user_id = redis.get(f"{RedisDB.auth_session}:{session_id}")
-		if user_id is None:
-			raise HTTPException(status_code=401, detail="Unauthorized")
-		user_id = user_id.decode('utf-8')
-		ur = UserRepository(self.session)
-		user = await ur.get_by_id(user_id)
-		if user is None:
-			raise HTTPException(status_code=401, detail="Unauthorized")
-		redis.set(f"{RedisDB.basket}:{user_id}", basket.model_dump_json(), ex=Config.basket_lifetime)
+	@post("/new_basket_state") #not optimal but interesting
+	async def new_basket_state(self, basket: Basket, redis: redis.Redis = Depends(get_redis_client), user: User = Depends(authorize_user)):
+		redis.set(f"{RedisDB.basket}:{user.id}", basket.model_dump_json(), ex=Config.basket_lifetime)
 		pr = ProductRepository(self.session)
 		products = await pr.get_all()
 		products_dict = dict()
@@ -56,8 +46,17 @@ class CatalogController(Controller):
 			basket_products = Basket.model_validate_json(b.decode('utf-8'))
 			for product in basket_products.products:
 				locked_workers += products_dict[product.id]*product.count
-				print(locked_workers)
 		redis.set(f"{RedisDB.free_workers}", Config.worker_count - locked_workers) 
 		return {"message": "OK"}
+
+	@get("/basket")
+	async def get_basket(self, redis: redis.Redis = Depends(get_redis_client), user: User = Depends(authorize_user)):
+		byte_basket = redis.get(f"{RedisDB.basket}:{user.id}")
+		if byte_basket is None:
+			raise HTTPException(status_code=404, detail="Корзина пуста")
+		return Basket.model_validate_json(byte_basket.decode('utf-8'))
+
+
+
 
 
