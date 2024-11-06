@@ -1,7 +1,6 @@
 
 from datetime import UTC, datetime, timedelta
 import secrets
-import uuid
 from fastapi import Cookie, Depends, HTTPException, Response
 from fastapi_controllers import Controller, get, post
 from sqlalchemy.ext.asyncio import AsyncSession
