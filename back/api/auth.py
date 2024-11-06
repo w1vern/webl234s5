@@ -8,9 +8,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import redis
 from database.database import get_db_session
-from database.redis import get_redis_client
+from database.redis import RedisDB, get_redis_client
 from database.repositories.user_repository import UserRepository
-from back.config import Config, RedisDB
+from back.config import Config
 from back.schemes.auth import GetAuthData, LoginData, RegisterData
 
 
@@ -30,8 +30,6 @@ class AuthController(Controller):
         session_id = secrets.token_urlsafe()
         response.set_cookie(key='session_id', value=session_id,
                             max_age=Config.auth_session_lifetime, httponly=True)
-        print(user.id)
-        print(str(user.id))
         redis.set(f"{RedisDB.auth_session}:{session_id}", str(user.id), ex=Config.auth_session_lifetime)
         return {"message": "OK"}
 
