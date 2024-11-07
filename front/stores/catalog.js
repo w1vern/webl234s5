@@ -1,4 +1,4 @@
-export const useCalatogStore = defineStore('catalogStore', {
+export const useCatalogStore = defineStore('catalogStore', {
     state: () => ({
       catalog: []
     }),

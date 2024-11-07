@@ -4,9 +4,11 @@ import InputText from 'primevue/inputtext';
 
 const in_search = ref('')
 
-const catalog_store = useCalatogStore()
+const catalog_store = useCatalogStore()
+const basket_store = useBasketStore()
 
 await callOnce(catalog_store.fetch)
+await callOnce(basket_store.fetch_state)
 
 const filtered = computed(() => {
     let search = in_search.value.toLowerCase()
@@ -15,7 +17,11 @@ const filtered = computed(() => {
         card.description.toLowerCase().includes(search) ||
         card.price.toLowerCase().includes(search)
     )
+})
 
+definePageMeta({
+  title: 'Каталог',
+  need_auth: true
 })
 
 
@@ -44,6 +50,12 @@ const filtered = computed(() => {
                                 </p>
                                 <p class="price">
                                     Цена: {{ card.price }}
+                                </p>
+                                <Button class="add_to_basket" @click="basket_store.add_product(card.id)">
+                                    Добавить в корзину
+                                </Button>
+                                <p class="count">
+                                    Осталось: {{ card.can_be_ordered }}
                                 </p>
                             </div>
                             <img :src="card.path_to_image" alt="picture" class="picture">

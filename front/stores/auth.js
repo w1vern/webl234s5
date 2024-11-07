@@ -6,7 +6,6 @@ export const useAuthStore = defineStore("authStore", {
   actions: {
     async fetch_session() {
       const { data } = await useMyFetch("/api/auth/session");
-      console.log(data)
       if (data.value) {
         this.isAuth = data.value.is_auth;
         this.phone = data.value.phone;

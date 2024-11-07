@@ -4,4 +4,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (to.meta?.need_not_auth && authStore.isAuth){
         return navigateTo("/")
     }
+    if (to.meta?.need_auth && !authStore.isAuth){
+        return navigateTo("/auth/login")
+    }
 })

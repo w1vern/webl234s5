@@ -14,8 +14,6 @@ from database.repositories.product_repository import ProductRepository
 from database.repositories.user_repository import UserRepository
 
 
-
-
 class CatalogController(Controller):
 	prefix = '/catalog'
 	tags = ['catalog']
@@ -53,7 +51,7 @@ class CatalogController(Controller):
 	async def get_basket(self, redis: redis.Redis = Depends(get_redis_client), user: User = Depends(authorize_user)):
 		byte_basket = redis.get(f"{RedisDB.basket}:{user.id}")
 		if byte_basket is None:
-			raise HTTPException(status_code=404, detail="Корзина пуста")
+			return Basket(products=[])
 		return Basket.model_validate_json(byte_basket.decode('utf-8'))
 
 
