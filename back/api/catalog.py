@@ -30,7 +30,10 @@ class CatalogController(Controller):
 
 	@post("/new_basket_state") #not optimal but interesting
 	async def new_basket_state(self, basket: Basket, redis: redis.Redis = Depends(get_redis_client), user: User = Depends(authorize_user)):
-		redis.set(f"{RedisDB.basket}:{user.id}", basket.model_dump_json(), ex=Config.basket_lifetime)
+		for product in basket.products:
+			if not product.count > 0:
+				basket.products.remove(product)
+		redis.set(f"{RedisDB.basket}:{user.id}", basket.model_dump_json())
 		pr = ProductRepository(self.session)
 		products = await pr.get_all()
 		products_dict = dict()

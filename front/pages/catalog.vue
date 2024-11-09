@@ -49,7 +49,7 @@ definePageMeta({
                                     Описание: {{ card.description }}
                                 </p>
                                 <p class="price">
-                                    Цена: {{ card.price }}
+                                    Цена: {{ card.price }} ₽
                                 </p>
                                 <Button class="add_to_basket" @click="basket_store.add_product(card.id)">
                                     Добавить в корзину
@@ -140,5 +140,9 @@ definePageMeta({
     width: 40%;
     height: max-content;
 
+}
+
+.count {
+    font-size: 1rem;
 }
 </style>

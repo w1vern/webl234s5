@@ -9,11 +9,17 @@ back:
 proxy:
 	node ./proxy/main.js
 
-redis:
+create_redis:
 	docker run --name Redis -p 6379:6379 -d redis
 
-postgres:
+redis:
+	docker start Redis
+
+create_postgres:
 	docker run --name PostgreSQL -p 5432:5432 -e POSTGRES_PASSWORD=1234 -d postgres
+
+postgres:
+	docker start PostgreSQL
 	
 gen_migration:
 	alembic revision --autogenerete -m "first migration"
