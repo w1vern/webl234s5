@@ -9,14 +9,8 @@ back:
 proxy:
 	node ./proxy/main.js
 
-create_redis:
-	docker run --name Redis -p 6379:6379 -d redis
-
 redis:
 	docker start Redis
-
-create_postgres:
-	docker run --name PostgreSQL -p 5432:5432 -e POSTGRES_PASSWORD=1234 -d postgres
 
 postgres:
 	docker start PostgreSQL
@@ -32,4 +26,23 @@ down_migration:
 
 fill_data:
 	python -m static.db_base_data
+
+create_postgres:
+	docker run --name PostgreSQL -p 5432:5432 -e POSTGRES_PASSWORD=1234 -d postgres
+
+create_redis:
+	docker run --name Redis -p 6379:6379 -d redis
+
+main_install:
+	poetry install
+
+proxy_intall:
+	npm install --prefix ./proxy
+
+front_install:
+	npm install --prefix ./front
+
+setup:
+	create_postgres
+
 
