@@ -100,6 +100,11 @@ const sale_value = ref('')
 				<div class="basket">
 					<table class="products">
 						<div class="product" v-for="product in basketStore.basket">
+							<div class="delete_product_container product_part">
+								<p class="delete_product" @click="basketStore.set_count(product.id, 0)">
+									<i class="pi pi-times"></i>
+								</p>
+							</div>
 							<div class="image_container product_part">
 								<img class="image" :src="product.path_to_image" alt="image">
 							</div>
@@ -114,7 +119,7 @@ const sale_value = ref('')
 							<div class="price product_part">
 								<p class="local_price_without_sale price_without_sale"
 									v-if="!(product.sale * basketStore.sale_activate)">{{
-										product.price }} ₽</p>
+										product.price*product.count }} ₽</p>
 								<div class="local_price_with_sale price_with_sale" v-else>
 									<p class="full_price">{{ product.price * product.count }} ₽</p>
 									<p class="sale_price">{{ (product.price - product.sale_size) * product.count }} ₽
@@ -411,4 +416,12 @@ const sale_value = ref('')
 	border-radius: 1.5rem;
 }
 
+.delete_product {
+	padding: 0.5rem;
+}
+
+.delete_product:hover {
+	background-color: var(--p-surface-300);
+	border-radius: 50%;
+}
 </style>

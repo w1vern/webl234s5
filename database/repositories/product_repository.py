@@ -1,7 +1,5 @@
 import datetime
-from pickletools import pynone
-import secrets
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from uuid import UUID
 from database.models import *
@@ -9,7 +7,7 @@ from typing import Optional
 
 
 class ProductRepository:
-	def __init__(self, session: Session) -> None:
+	def __init__(self, session: AsyncSession) -> None:
 		self.session = session
 
 	async def create(self, label: str, description: str, price: float, sale: float, path_to_image: str, worker_count: int = 1, time_to_resolve: datetime.timedelta = datetime.timedelta(days=1)) -> Optional[Product]:

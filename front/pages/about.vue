@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const cards = ref([
     { label: 'Профессионализм и надежность', text: 'Наша юридическая компания специализируется на предоставлении полного спектра правовых услуг для бизнеса и частных клиентов. Мы оказываем поддержку в сложных правовых вопросах, консультируем и защищаем интересы наших клиентов на каждом этапе сотрудничества.' },
@@ -11,17 +11,50 @@ const cards = ref([
 ]);
 
 const currentIndex = ref(0);
+const isAnimating = ref(false);
 
 const currentCard = computed(() => cards.value[currentIndex.value]);
 
 function nextCard() {
-    currentIndex.value = (currentIndex.value + 1) % cards.value.length;
+    if (isAnimating.value) return;
+    isAnimating.value = true;
+
+    const cardElement = document.querySelector('.card');
+    cardElement.classList.add('slide-out-right');
+
+
+    setTimeout(() => {
+        currentIndex.value = (currentIndex.value + 1) % cards.value.length;
+        cardElement.classList.remove('slide-out-right');
+        cardElement.classList.add('slide-in-left');
+
+        setTimeout(() => {
+            cardElement.classList.remove('slide-in-left');
+            isAnimating.value = false;
+        }, 1000);
+    }, 0);
 }
 
 function prevCard() {
-    currentIndex.value = (currentIndex.value - 1 + cards.value.length) % cards.value.length;
+    if (isAnimating.value) return;
+    isAnimating.value = true;
+
+    const cardElement = document.querySelector('.card');
+    cardElement.classList.add('slide-out-left');
+
+    setTimeout(() => {
+        currentIndex.value = (currentIndex.value - 1 + cards.value.length) % cards.value.length;
+        cardElement.classList.remove('slide-out-left');
+        cardElement.classList.add('slide-in-right');
+
+        setTimeout(() => {
+            cardElement.classList.remove('slide-in-right');
+            isAnimating.value = false;
+        }, 1000);
+    }, 0);
 }
 </script>
+
 
 <template>
     <div class="page">
@@ -30,9 +63,11 @@ function prevCard() {
             <div class="content">
                 <div class="carousel">
                     <button @click="prevCard" class="carousel-button">◀</button>
-                    <div class="card">
-                        <p class="label">{{ currentCard.label }}</p>
-                        <p class="text">{{ currentCard.text }}</p>
+                    <div class="card-container">
+                        <div class="card">
+                            <p class="label">{{ currentCard.label }}</p>
+                            <p class="text">{{ currentCard.text }}</p>
+                        </div>
                     </div>
                     <button @click="nextCard" class="carousel-button">▶</button>
                 </div>
@@ -65,17 +100,28 @@ function prevCard() {
     display: flex;
     align-items: center;
     gap: 2rem;
+    position: relative;
+}
+
+.card-container {
+    position: relative;
+    width: 30vw;
+    height: 20rem;
+    overflow: hidden;
 }
 
 .card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 30vw;
+    width: 100%;
+    height: 100%;
     padding: 2rem;
     background-color: var(--p-surface-100);
     border-radius: 1rem;
     gap: 1rem;
+    position: absolute;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .label {
@@ -86,6 +132,42 @@ function prevCard() {
     font-size: 1.5rem;
 }
 
+.slide-out-right {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.slide-out-left {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.slide-in-left {
+    transform: translateX(-100%);
+    opacity: 0;
+    animation: slide-in-left 0.5s forwards;
+}
+
+.slide-in-right {
+    transform: translateX(100%);
+    opacity: 0;
+    animation: slide-in-right 0.5s forwards;
+}
+
+@keyframes slide-in-left {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-right {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 .carousel-button {
     background: none;
     border: none;
@@ -93,5 +175,11 @@ function prevCard() {
     cursor: pointer;
     color: var(--primary-color, #000);
     padding: 1rem;
+    transition: transform 0.2s, color 0.3s ease;
+}
+
+.carousel-button:hover {
+    color: var(--hover-color, #555);
+    transform: scale(1.1);
 }
 </style>
