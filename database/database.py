@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
 import os
-from database.models.base import Base 
+from database.models import *
 
 import contextlib
 
