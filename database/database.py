@@ -1,40 +1,55 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from dotenv import load_dotenv
-import os
-from database.models import *
 
 import contextlib
+import os
+from typing import (
+    Any,
+    AsyncGenerator,
+    AsyncIterator,
+)
 
+from sqlalchemy.ext.asyncio import (
+    AsyncConnection,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
-from sqlalchemy.ext.asyncio import (AsyncConnection, AsyncSession,
-                                    async_sessionmaker, create_async_engine)
+from dotenv import load_dotenv
 
-from typing import Any, AsyncGenerator, AsyncIterator
+from .models.base import Base
+
+raising_message = "DatabaseSessionManager is not initialized"
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_IP = os.getenv("DB_IP")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+
+if DB_USER is None or DB_PASSWORD is None or DB_IP is None or DB_PORT is None or DB_NAME is None:
+    raise Exception("Environment variables are not set")
 
 
 class DatabaseSessionManager:
     def __init__(self, host: str, engine_kwargs: dict[str, Any] = {}):
         self._engine = create_async_engine(host, **engine_kwargs)
-        self._session_maker = async_sessionmaker(
+        self._sessionmaker = async_sessionmaker(
             autocommit=False, bind=self._engine, expire_on_commit=False)
 
     async def close(self):
         if self._engine is None:
-            raise Exception("DatabaseSessionManager is not initialized")
+            raise Exception(raising_message)
         await self._engine.dispose()
 
         self._engine = None
-        self._session_maker = None
+        self._sessionmaker = None
 
     @contextlib.asynccontextmanager
     async def connect(self) -> AsyncIterator[AsyncConnection]:
         if self._engine is None:
-            raise Exception("DatabaseSessionManager is not initialized")
+            raise Exception(raising_message)
 
         async with self._engine.begin() as connection:
             try:
@@ -43,28 +58,46 @@ class DatabaseSessionManager:
                 await connection.rollback()
                 raise
 
-    @contextlib.asynccontextmanager
-    async def session(self) -> AsyncIterator[AsyncSession]:
-        if self._session_maker is None:
-            raise Exception("DatabaseSessionManager is not initialized")
+    async def session(self) -> AsyncGenerator[AsyncSession, None]:
+        if self._sessionmaker is None:
+            raise Exception(raising_message)
 
-        session = self._session_maker()
+        session = self._sessionmaker()
         try:
             yield session
-        except Exception:
+            await session.commit()
+        except Exception as e:
             await session.rollback()
-            raise
+            raise e
         finally:
             await session.close()
 
-session_manager = DatabaseSessionManager(DATABASE_URL, {"echo": False})
+    @contextlib.asynccontextmanager
+    async def context_session(self) -> AsyncIterator[AsyncSession]:
+        async for session in self.session():
+            yield session
+
+    async def create_db_and_tables(self):
+        async with self.connect() as conn:
+            await conn.run_sync(Base.metadata.create_all)
 
 
-async def get_db_session():
-    async with session_manager.session() as session:
-        yield session
+def get_db_url(user: str,
+               password: str,
+               ip: str,
+               port: int,
+               name: str
+               ) -> str:
+    return f"postgresql+asyncpg://{user}:{password}@{ip}:{port}/{name}"
 
 
-async def create_db_and_tables():
-    async with session_manager.connect() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+DATABASE_URL = get_db_url(
+    user=DB_USER,
+    password=DB_PASSWORD,
+    ip=DB_IP,
+    port=int(DB_PORT),
+    name=DB_NAME
+)
+
+session_manager = DatabaseSessionManager(DATABASE_URL,
+                                         {"echo": False})
