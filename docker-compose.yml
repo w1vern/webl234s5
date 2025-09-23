@@ -74,7 +74,6 @@ services:
     profiles:
       - with_frontend
     restart: unless-stopped
-
     labels:
       - traefik.enable=true
       - traefik.http.services.${NETWORK_NAME}.loadbalancer.server.port=80
