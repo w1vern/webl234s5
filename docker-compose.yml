@@ -36,8 +36,6 @@ services:
       redis:
         condition: service_started
     command: bash -c "uvicorn back.main:app --host 0.0.0.0 --port 8000 --workers ${BACKEND_WORKERS_COUNT}"
-    profiles:
-      - with_backend
     restart: unless-stopped
 
   alembic:
@@ -57,22 +55,18 @@ services:
     depends_on:
       backend:
         condition: service_started
-    profiles:
-      - with_frontend
     restart: unless-stopped
 
   nginx:
     image: nginx:latest
     volumes:
-      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./logs/nginx:/var/log/nginx/
     depends_on:
       frontend:
         condition: service_started
     ports:
       - ${NGINX_PORT}:80
-    profiles:
-      - with_frontend
     restart: unless-stopped
     labels:
       - traefik.enable=true
