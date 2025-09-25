@@ -84,6 +84,7 @@ async function send_form() {
             </YandexMapDefaultMarker>
           </YandexMap>
         </div>
+        <ChatDrawer />
         <div class="feedback">
           <div class="feedback_form">
             <div class="form_header">

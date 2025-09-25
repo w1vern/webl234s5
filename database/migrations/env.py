@@ -8,9 +8,8 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from database.models import *
 from database.database import DATABASE_URL
-
+from database.models import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

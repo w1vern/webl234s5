@@ -1,4 +1,4 @@
-import datetime
+
 import uuid
 from uuid import uuid4
 
@@ -14,4 +14,3 @@ class Feedback(Base):
     name: Mapped[str] = mapped_column()
     email: Mapped[str] = mapped_column()
     message: Mapped[str] = mapped_column()
-     

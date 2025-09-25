@@ -24,6 +24,6 @@ var server = http.createServer(function (req, res) {
 server.on("upgrade", function (req, socket, head) { 
   frontProxy.ws(req, socket, head); 
 }); 
-port = 8081
+port = 80
 console.log(`listening on port ${port}`); 
 server.listen(port);

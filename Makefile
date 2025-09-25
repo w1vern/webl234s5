@@ -16,7 +16,7 @@ postgres:
 	docker start PostgreSQL
 	
 gen_migration:
-	alembic revision --autogenerete -m "first migration"
+	alembic revision --autogenerate -m "first migration"
 
 migration:
 	alembic upgrade head

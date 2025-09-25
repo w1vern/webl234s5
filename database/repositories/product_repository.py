@@ -25,4 +25,4 @@ class ProductRepository:
 
 	async def get_all(self) -> list[Product]:
 		stmt = select(Product)
-		return await self.session.scalars(stmt)
+		return list(await self.session.scalars(stmt))

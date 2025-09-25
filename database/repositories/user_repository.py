@@ -1,4 +1,4 @@
-import secrets
+
 from typing import Optional
 from uuid import UUID
 
@@ -30,13 +30,9 @@ class UserRepository:
 
     async def get_by_auth(self, phone_number: str, password: str) -> Optional[User]:
         stmt = select(User).where(User.phone_number == phone_number).limit(1)
-        user: User = await self.session.scalar(stmt)
+        user = await self.session.scalar(stmt)
         if user is None:
             return None
         if not check_password_hash(user.hashed_password, password):
             return None
         return user
-
-    async def update_secret(self, user: User) -> None:
-        user.secret = secrets.token_urlsafe()
-        await self.session.flush()

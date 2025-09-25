@@ -23,6 +23,18 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
   backend:
     build:
       context: .
@@ -35,6 +47,8 @@ services:
         condition: service_started
       redis:
         condition: service_started
+      rabbitmq:
+        condition: service_healthy
       fill_db:
         condition: service_started
     command: bash -c "uvicorn back.main:app --host 0.0.0.0 --port 8000 --workers ${BACKEND_WORKERS_COUNT}"
@@ -54,6 +68,20 @@ services:
         condition: service_started
     command: python -m static.db_base_data
 
+  neural:
+    build:
+      context: .
+    env_file:
+      - .env
+    depends_on:
+      alembic:
+        condition: service_started
+      postgres:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    command: python -m neural
+    restart: unless-stopped
 
   alembic:
     build:
@@ -86,10 +114,7 @@ services:
       - ${NGINX_PORT}:80
     restart: unless-stopped
 
-
 volumes:
   postgres_data:
   redis_data:
   rabbitmq_data:
-
-

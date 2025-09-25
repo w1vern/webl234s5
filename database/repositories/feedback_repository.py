@@ -25,4 +25,4 @@ class FeedbackRepository:
     
     async def get_all(self) -> list[Feedback]:
         stmt = select(Feedback)
-        return await self.session.scalars(stmt)
+        return list(await self.session.scalars(stmt))

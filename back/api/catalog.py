@@ -1,8 +1,8 @@
 
 from fastapi import Cookie, Depends, HTTPException, Response
 from fastapi_controllers import Controller, get, post
-from sqlalchemy.ext.asyncio import AsyncSession
 from redis.asyncio import Redis
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from back.authorize_user import authorize_user
 from back.config import Config
