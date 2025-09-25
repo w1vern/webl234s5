@@ -1,8 +1,12 @@
 import datetime
-from sqlalchemy.orm import mapped_column, Mapped
-from database.models.base import Base
-from uuid import uuid4
 import uuid
+from uuid import uuid4
+
+from sqlalchemy.orm import Mapped, mapped_column
+
+from database.models.base import Base
+
+
 class Product(Base):
     __tablename__ = "products"
 

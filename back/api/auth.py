@@ -1,15 +1,16 @@
 
 import secrets
+
 from fastapi import Cookie, Depends, HTTPException, Response
 from fastapi_controllers import Controller, get, post
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from redis.asyncio import Redis
+from back.config import Config
+from back.schemes.auth import GetAuthData, LoginData, RegisterData
 from database.database import session_manager
 from database.redis import RedisDB, get_redis_client
 from database.repositories.user_repository import UserRepository
-from back.config import Config
-from back.schemes.auth import GetAuthData, LoginData, RegisterData
 
 
 class AuthController(Controller):

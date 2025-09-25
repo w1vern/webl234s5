@@ -1,6 +1,7 @@
 
 from pydantic import BaseModel
 
+
 class LoginData(BaseModel):
     phone: str
     password: str

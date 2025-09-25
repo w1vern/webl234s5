@@ -1,6 +1,6 @@
-export const useMyFetch = (request, opts) => {
-    const config = useRuntimeConfig()
-  
-    return useFetch(request, { baseURL: 'http://localhost:8081', ...opts, server: false })
-  }
- 
+export const useMyFetch = (request, opts = {}) => {
+  const config = useRuntimeConfig()
+  const base = config.public?.apiBase || 'http://localhost:80'
+
+  return useFetch(request, { baseURL: base, ...opts, server: false })
+}

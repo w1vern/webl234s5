@@ -1,9 +1,11 @@
 import datetime
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from uuid import UUID
-from database.models import *
 from typing import Optional
+from uuid import UUID
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from database.models import *
 
 
 class ProductRepository:

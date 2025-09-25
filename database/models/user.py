@@ -1,8 +1,9 @@
-from sqlalchemy.orm import mapped_column, Mapped, relationship
-from database.models.base import Base
-from uuid import uuid4
 import uuid
+from uuid import uuid4
 
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from database.models.base import Base
 
 
 class User(Base):

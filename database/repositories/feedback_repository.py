@@ -1,10 +1,11 @@
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import false, select
-from uuid import UUID
-from database.models import *
 from typing import Optional
+from uuid import UUID
 
+from sqlalchemy import false, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from database.models import *
 from database.models.feedback import Feedback
 
 

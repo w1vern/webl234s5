@@ -1,9 +1,10 @@
 
 
-from enum import Enum
-from redis.asyncio import Redis
-from dotenv import load_dotenv
 import os
+from enum import Enum
+
+from dotenv import load_dotenv
+from redis.asyncio import Redis
 
 load_dotenv()
 REDIS_IP = os.getenv("REDIS_IP")
@@ -24,4 +25,5 @@ def get_redis_client() -> Redis:
         host=REDIS_IP,
         port=int(REDIS_PORT),
         db=0,
-        decode_responses=True)
+        decode_responses=True
+    )

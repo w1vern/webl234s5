@@ -1,5 +1,4 @@
 <script setup>
-import { YandexMap, YandexMapDefaultFeaturesLayer, YandexMapDefaultMarker, YandexMapDefaultSchemeLayer } from 'vue-yandex-maps';
 import IftaLabel from 'primevue/iftalabel';
 import Textarea from 'primevue/textarea';
 import { useToast } from 'primevue/usetoast';

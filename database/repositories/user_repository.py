@@ -1,10 +1,12 @@
 import secrets
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from uuid import UUID
-from database.models import *
 from typing import Optional
-from werkzeug.security import generate_password_hash, check_password_hash
+from uuid import UUID
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from database.models import *
 
 
 class UserRepository:
