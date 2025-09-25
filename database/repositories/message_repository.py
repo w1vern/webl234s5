@@ -13,7 +13,7 @@ class MessageRepository:
         self.session = session
 
     async def create(self, text: str, chat: Chat, from_user: bool) -> Message:
-        message = Message(text=text, chat_id=chat.id)
+        message = Message(text=text, chat_id=chat.id, from_user=from_user)
         self.session.add(message)
         await self.session.flush()
         message = await self.get_by_id(message.id)

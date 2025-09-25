@@ -19,6 +19,16 @@ from database.repositories.message_repository import MessageRepository
 
 router = APIRouter(prefix='/chat', tags=['chat'])
 
+async def receive_text_nonblocking(websocket: WebSocket, timeout: float = 0.1) -> str | None:
+    try:
+        event = await asyncio.wait_for(websocket.receive(), timeout=timeout)
+        if event["type"] == "websocket.receive":
+            return event.get("text")
+        elif event["type"] == "websocket.disconnect":
+            return None
+    except asyncio.TimeoutError:
+        return None
+
 
 @router.websocket('/ws/{chat_id}')
 async def websocket_endpoint(websocket: WebSocket,
@@ -26,16 +36,22 @@ async def websocket_endpoint(websocket: WebSocket,
                              broker: RabbitBroker = Depends(get_broker),
                              redis: Redis = Depends(get_redis_client),
                              ) -> None:
+    
+    
     print("Websocket connected")
     await websocket.accept()
     try:
         while True:
-            data = await websocket.receive_text()
-            await send_message(broker, rabbit_queue_to_neural, RabbitMessage(chat_id=chat_id, message=data))
+            data = await receive_text_nonblocking(websocket)
+            if data:
+                await send_message(broker, rabbit_queue_to_neural, RabbitMessage(chat_id=chat_id, message=data))
             ans = await redis.get(f"{RedisDB.ws_answers.value}:{chat_id}")
-            if not ans is None:
+            if not (ans is None):
+                print(ans)
                 await websocket.send_text(ans)
                 await redis.delete(f"{RedisDB.ws_answers.value}:{chat_id}")
+            else:
+                print("Waiting for answer")
             await asyncio.sleep(0.5)
     except Exception as e:
         print(e)

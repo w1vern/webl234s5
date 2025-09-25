@@ -9,3 +9,4 @@ from database.redis import RedisDB, get_redis_client
 @router.subscriber(rabbit_queue_to_backend)
 async def handler(message: RabbitMessage, redis: Redis = Depends(get_redis_client)) -> None:
     await redis.set(f"{RedisDB.ws_answers.value}:{message.chat_id}", message.message)
+    print(message)

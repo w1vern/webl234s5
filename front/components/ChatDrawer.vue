@@ -17,7 +17,7 @@ const scrollAnchor = ref(null)
 
 function buildWsUrl(chatId) {
   const proto = window.location.protocol === 'https:' ? 'wss' : 'ws'
-  let url = `${proto}://${window.location.host}/api/chat/ws/${chatId}`
+  let url = `ws://localhost:8000/api/chat/ws/${chatId}`
 
   //url += (url.includes('?') ? '&' : '?') + `t=${Date.now()}`
   return url

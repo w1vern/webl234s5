@@ -50,8 +50,17 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       yandexToken: process.env.NUXT_PUBLIC_YANDEX_TOKEN || process.env.YANDEX_TOKEN || '',
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_API_BASE || 'http://localhost:80'
+      apiBase: '/'
     },
+  },
+  nitro: {
+    devProxy: {
+      '/api': {
+        target: `http://localhost:8000/api`,
+        changeOrigin: true,
+        ws: true,
+      }
+    }
   },
   devServer: {
     host: "0.0.0.0",
