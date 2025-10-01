@@ -53,6 +53,8 @@ services:
         condition: service_started
     command: bash -c "uvicorn back.main:app --host 0.0.0.0 --port 8000 --workers ${BACKEND_WORKERS_COUNT}"
     restart: unless-stopped
+    profiles:
+      - with_backend
 
   fill_db:
     build:
@@ -82,6 +84,8 @@ services:
         condition: service_healthy
     command: python -m neural
     restart: unless-stopped
+    profiles:
+      - with_neural
 
   alembic:
     build:
@@ -101,6 +105,8 @@ services:
       backend:
         condition: service_started
     restart: unless-stopped
+    profiles:
+      - with_frontend
 
   nginx:
     image: nginx:latest
@@ -113,6 +119,8 @@ services:
     ports:
       - ${NGINX_PORT}:80
     restart: unless-stopped
+    profiles:
+      - with_frontend
 
 volumes:
   postgres_data:

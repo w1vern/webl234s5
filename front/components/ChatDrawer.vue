@@ -232,24 +232,217 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.chat-toggle { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 2000; width: 3.5rem; height: 3.5rem; border-radius: 999px; border: none; background: #0ea5a4; color: white; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
-.chat-drawer { position: fixed; right: 1rem; bottom: 1rem; top: 6rem; width: 60vw; max-width: 1000px; z-index: 2000; background: #fff; border-radius: 8px; box-shadow: 0 12px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; }
-.chat-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.06); }
-.chat-body { display: flex; flex: 1; min-height: 0; }
-.chat-list { width: 240px; border-right: 1px solid rgba(0,0,0,0.04); padding: 0.75rem; overflow-y: auto; }
-.chat-messages-area { display:flex; flex-direction:column; flex: 1; padding: 0.75rem; min-width: 0; }
-.messages { flex: 1; overflow-y: auto; padding: 0.5rem 0; display:flex; flex-direction:column; gap:0.5rem; }
-.message { display:flex; width:100%; }
-.message .bubble { max-width: 70%; padding: 0.6rem 0.9rem; border-radius: 12px; }
-.message.from-user { justify-content: flex-end; }
-.message.from-user .bubble { background: #0ea5a4; color: white; border-bottom-right-radius: 4px; }
-.message.from-back { justify-content: flex-start; }
-.message.from-back .bubble { background: #f1f1f1; color: black; border-bottom-left-radius: 4px; }
-.chat-input { display:flex; gap:0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(0,0,0,0.04); }
-.chat-input input[type="text"] { flex:1; padding: 0.6rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
-.muted { color: rgba(0,0,0,0.5); }
-.ws-status { margin-left: 0.75rem; font-size: 0.85rem; padding: 0.2rem 0.45rem; border-radius: 999px; background: rgba(0,0,0,0.05); }
-.ws-status.connected { background: rgba(16,185,129,0.12); color: #059669; }
-.fade-enter-active, .fade-leave-active { transition: opacity .15s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.chat-toggle { 
+  position: fixed; 
+  right: 1.25rem; 
+  bottom: 1.25rem; 
+  z-index: 2000; 
+  width: 3.5rem; 
+  height: 3.5rem; 
+  border-radius: 999px; 
+  border: none; 
+  background: var(--p-primary-400); 
+  color: white; 
+  font-size: 1.25rem; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  cursor: pointer; 
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12); 
+}
+.chat-toggle:hover {
+  background: var(--p-primary-300);
+}
+
+.chat-drawer { 
+  position: fixed; 
+  right: 1rem; 
+  bottom: 1rem; 
+  top: 6rem; 
+  width: 60vw; 
+  max-width: 1000px; 
+  z-index: 2000; 
+  background: var(--p-surface-200); 
+  border-radius: 8px; 
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2); 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; 
+}
+
+.chat-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 1.5rem; 
+  border-bottom: 1px solid var(--p-surface-600); 
+  color: var(--p-surface-950); 
+  font-size: 1.5rem; 
+}
+.chat-header button {
+  padding: 0.75rem 1rem;
+  border: none;
+  background: var(--p-surface-300);
+  color: var(--p-surface-950);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.chat-header button:hover {
+  background: var(--p-surface-400);
+}
+.chat-header .close-btn {
+  background: none;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+.chat-header .close-btn:hover {
+  background: var(--p-surface-300);
+  border-radius: 50%;
+}
+
+.chat-body { 
+  display: flex; 
+  flex: 1; 
+  min-height: 0; 
+}
+
+.chat-list { 
+  width: 240px; 
+  border-right: 1px solid var(--p-surface-600); 
+  padding: 0.75rem; 
+  overflow-y: auto; 
+  background: var(--p-surface-100); 
+}
+.chat-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.chat-list li {
+  padding: 0.75rem;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.chat-list li:hover {
+  background: var(--p-surface-200);
+}
+.chat-list li.active {
+  background: var(--p-surface-300);
+}
+.chat-list .chat-name {
+  color: var(--p-surface-950);
+  font-size: 1.1rem;
+}
+
+.chat-messages-area { 
+  display: flex; 
+  flex-direction: column; 
+  flex: 1; 
+  padding: 0.75rem; 
+  min-width: 0; 
+}
+
+.chat-meta {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--p-surface-600);
+  color: var(--p-surface-950);
+  font-size: 1.2rem;
+}
+
+.messages { 
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 0.5rem 0; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.5rem; 
+}
+
+.message { 
+  display: flex; 
+  width: 100%; 
+}
+
+.message .bubble { 
+  max-width: 70%; 
+  padding: 0.6rem 0.9rem; 
+  border-radius: 12px; 
+  font-size: 1.1rem;
+}
+
+.message.from-user { 
+  justify-content: flex-end; 
+}
+
+.message.from-user .bubble { 
+  background: var(--p-primary-400); 
+  color: white; 
+  border-bottom-right-radius: 4px; 
+}
+
+.message.from-back { 
+  justify-content: flex-start; 
+}
+
+.message.from-back .bubble { 
+  background: var(--p-surface-100); 
+  color: var(--p-surface-950); 
+  border-bottom-left-radius: 4px; 
+}
+
+.chat-input { 
+  display: flex; 
+  gap: 0.5rem; 
+  padding-top: 0.5rem; 
+  border-top: 1px solid var(--p-surface-600); 
+}
+
+.chat-input input[type="text"] { 
+  flex: 1; 
+  padding: 0.6rem; 
+  border-radius: 6px; 
+  border: 1px solid var(--p-surface-600); 
+  background: var(--p-surface-100);
+  color: var(--p-surface-950);
+}
+
+.chat-input button {
+  padding: 0.6rem 1rem;
+  border: none;
+  background: var(--p-primary-400);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.chat-input button:hover {
+  background: var(--p-primary-300);
+}
+
+.muted { 
+  color: var(--p-surface-500); 
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.ws-status { 
+  margin-left: 0.75rem; 
+  font-size: 0.85rem; 
+  padding: 0.2rem 0.45rem; 
+  border-radius: 999px; 
+  background: var(--p-surface-300); 
+}
+
+.ws-status.connected { 
+  background: var(--p-primary-100); 
+  color: var(--p-primary-400); 
+}
+
+.fade-enter-active, .fade-leave-active { 
+  transition: opacity .15s; 
+}
+
+.fade-enter-from, .fade-leave-to { 
+  opacity: 0; 
+}
 </style>
