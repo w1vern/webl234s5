@@ -59,6 +59,9 @@ services:
   fill_db:
     build:
       context: .
+      args:
+        - YANDEX_TOKEN=${YANDEX_TOKEN}
+        - API_BASE_URL=${API_BASE_URL}
     env_file:
       - .env
     depends_on:
@@ -101,9 +104,6 @@ services:
       context: ./front
     env_file:
       - .env
-    depends_on:
-      backend:
-        condition: service_started
     restart: unless-stopped
     profiles:
       - with_frontend

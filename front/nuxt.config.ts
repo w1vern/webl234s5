@@ -1,11 +1,9 @@
 import { definePreset } from "@primevue/themes";
-import Aura from "@primevue/themes/aura"
-import 'dotenv/config'
-require("dotenv").config()
-
+import Aura from "@primevue/themes/aura";
+import 'dotenv/config';
 
 const surface = {
-  50 : '{zinc.50}',
+  50: '{zinc.50}',
   100: '{zinc.100}',
   200: '{zinc.200}',
   300: '{zinc.300}',
@@ -16,7 +14,7 @@ const surface = {
   800: '{zinc.800}',
   900: '{zinc.900}',
   950: '{zinc.950}'
-}
+};
 
 const MyPreset = definePreset(Aura, {
   semantic: {
@@ -44,7 +42,7 @@ const MyPreset = definePreset(Aura, {
   }
 });
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// https://nuxt.com/docs/api/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
@@ -54,11 +52,9 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
-    devProxy: {
-      '/api': {
-        target: `http://localhost:8000/api`,
-        changeOrigin: true,
-        ws: true,
+    routeRules: {
+      '/api/**': { 
+        proxy: `${process.env.API_BASE_URL || 'http://localhost:8000'}/api/**` 
       }
     }
   },
@@ -66,10 +62,9 @@ export default defineNuxtConfig({
     host: "0.0.0.0",
     port: 3000
   },
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: '2025-07-15',
   devtools: {
     enabled: true,
-
     timeline: {
       enabled: true
     }
@@ -91,4 +86,4 @@ export default defineNuxtConfig({
   css: [
     'primeicons/primeicons.css'
   ]
-})
+});
